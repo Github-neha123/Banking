@@ -12,26 +12,37 @@ pipeline {
 
         stage('Check Python') {
             steps {
-                bat 'python --version'
+                sh 'python3 --version'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                bat 'pip install -r requirements.txt'
+                // install requirements if any, ignore if empty
+                sh 'pip3 install -r requirements.txt || true'
             }
         }
 
-        stage('Run Tests') {
+        stage('Run Unit Tests') {
             steps {
-                bat 'python -m unittest discover'
+                sh 'python3 -m unittest discover'
             }
         }
 
-        stage('Run Application') {
+        stage('Run Application (Optional)') {
             steps {
-                bat 'python banking_system.py'
+                echo ' Skipping interactive run in CI pipeline to avoid hanging.'
+                // If you really want to run non-interactive tests, create a separate script without input()
             }
+        }
+    }
+
+    post {
+        success {
+            echo ' Build & Tests Successful'
+        }
+        failure {
+            echo ' Build Failed'
         }
     }
 }
