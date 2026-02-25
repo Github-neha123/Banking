@@ -10,36 +10,52 @@ pipeline {
             }
         }
 
-        stage('Check Python') {
+        stage('Setup Virtual Environment') {
             steps {
-                sh '/c/Users/kmnehamaimuna/AppData/Local/Microsoft/WindowsApps/python3 --version'
+                sh '''
+                # Create virtual environment in Jenkins workspace
+                python3 -m venv venv || python -m venv venv
+
+                # Activate venv
+                source venv/bin/activate
+
+                # Upgrade pip inside venv
+                pip install --upgrade pip
+                '''
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                // install requirements if any, ignore if empty
-                sh '/c/Users/kmnehamaimuna/AppData/Local/Microsoft/WindowsApps/pip3 install -r requirements.txt || true'
+                sh '''
+                source venv/bin/activate
+                pip install -r requirements.txt || true
+                '''
             }
         }
 
         stage('Run Unit Tests') {
             steps {
-                sh '/c/Users/kmnehamaimuna/AppData/Local/Microsoft/WindowsApps/python3 -m unittest discover'
+                sh '''
+                source venv/bin/activate
+                python -m unittest discover
+                '''
             }
         }
 
-        stage('Run Application (Optional)') {
+        stage('Run Non-Interactive Simulation') {
             steps {
-                echo ' Skipping interactive run in CI pipeline to avoid hanging.'
-                // If you really want to run non-interactive tests, create a separate script without input()
+                sh '''
+                source venv/bin/activate
+                python simulate_run.py
+                '''
             }
         }
     }
 
     post {
         success {
-            echo ' Build & Tests Successful'
+            echo ' Build, Tests & Simulation Successful'
         }
         failure {
             echo ' Build Failed'
