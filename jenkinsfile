@@ -5,7 +5,7 @@ pipeline {
 
         stage('Clone Repository') {
             steps {
-                git branch: 'main',
+                git branch: 'master',
                     url: 'https://github.com/Github-neha123/Banking.git'
             }
         }
