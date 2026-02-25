@@ -12,20 +12,20 @@ pipeline {
 
         stage('Check Python') {
             steps {
-                sh 'python3 --version'
+                sh '/c/Users/kmnehamaimuna/AppData/Local/Microsoft/WindowsApps/python3 --version'
             }
         }
 
         stage('Install Dependencies') {
             steps {
                 // install requirements if any, ignore if empty
-                sh 'pip3 install -r requirements.txt || true'
+                sh '/c/Users/kmnehamaimuna/AppData/Local/Microsoft/WindowsApps/pip3 install -r requirements.txt || true'
             }
         }
 
         stage('Run Unit Tests') {
             steps {
-                sh 'python3 -m unittest discover'
+                sh '/c/Users/kmnehamaimuna/AppData/Local/Microsoft/WindowsApps/python3 -m unittest discover'
             }
         }
 
