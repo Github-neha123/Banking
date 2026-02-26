@@ -15,6 +15,17 @@ pipeline {
                 echo ' Repository cloned successfully. Skipping Python execution to avoid errors.'
             }
         }
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t banking-app .'
+            }
+        }
+
+        stage('Run Container') {
+            steps {
+                sh 'docker run --rm banking-app'
+            }
+        }
     }
 
     post {
