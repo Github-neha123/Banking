@@ -53,6 +53,23 @@ class Bank:
         return account
 
 
+# ✅ DEMO MODE FOR JENKINS
+def demo_mode():
+    print("\n Running in Non-Interactive Demo Mode (CI/CD)")
+    bank = Bank()
+
+    # Create demo account
+    demo_account = BankAccount("101", "Neha", 1000)
+    bank.accounts["101"] = demo_account
+
+    demo_account.deposit(500)
+    demo_account.withdraw(200)
+    demo_account.check_balance()
+    demo_account.display_details()
+
+    print("\n Demo completed successfully!")
+
+
 def main():
     bank = Bank()
 
@@ -65,7 +82,12 @@ def main():
         print("5. View Account Details")
         print("6. Exit")
 
-        choice = input("Select an option (1-6): ")
+        try:
+            choice = input("Select an option (1-6): ")
+        except EOFError:
+            # If running in Jenkins (non-interactive)
+            demo_mode()
+            break
 
         if choice == "1":
             bank.create_account()
